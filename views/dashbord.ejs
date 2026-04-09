@@ -1,27 +1,38 @@
-<h1>Welcome, <%= user.username %>!</h1>
-<a href="/logout">Logout</a>
+<!DOCTYPE html>
+<html lang="en">
+<head><title>Dashboard</title></head>
+<body>
+  <h1>Welcome, <%= user ? user.username : 'User' %>!</h1>
+  <a href="/logout">Logout</a>
 
-<form action="/tasks" method="POST">
-  <input name="title" placeholder="Task title" required>
-  <input name="description" placeholder="Description">
-  <input type="date" name="deadline">
-  <select name="priority">
-    <option value="low">Low</option>
-    <option value="medium" selected>Medium</option>
-    <option value="high">High</option>
-  </select>
-  <button type="submit">Add Task</button>
-</form>
+  <h2>Add New Task</h2>
+  <form action="/tasks" method="POST">
+    <input name="title" placeholder="Task Title" required><br>
+    <input name="description" placeholder="Description"><br>
+    <input type="date" name="deadline"><br>
+    <select name="priority">
+      <option value="low">Low</option>
+      <option value="medium">Medium</option>
+      <option value="high">High</option>
+    </select><br><br>
+    <button type="submit">Add Task</button>
+  </form>
 
-<ul>
-  <% tasks.forEach(task => { %>
-    <li>
-      <strong><%= task.title %></strong> 
-      <span><%= task.completed ? '✅' : '' %></span>
-      <a href="/tasks/<%= task._id %>/edit">Edit</a>
-      <form action="/tasks/<%= task._id %>?_method=DELETE" method="POST" style="display:inline;">
-        <button type="submit">Delete</button>
-      </form>
-    </li>
-  <% }) %>
-</ul>
+  <h2>My Tasks</h2>
+  <ul>
+    <% if (tasks && tasks.length > 0) { %>
+      <% tasks.forEach(task => { %>
+        <li>
+          <strong><%= task.title %></strong> 
+          - <%= task.completed ? '✅ Completed' : 'Pending' %>
+          <form action="/tasks/<%= task._id %>?_method=DELETE" method="POST" style="display:inline;">
+            <button type="submit">Delete</button>
+          </form>
+        </li>
+      <% }) %>
+    <% } else { %>
+      <p>No tasks yet. Add one above!</p>
+    <% } %>
+  </ul>
+</body>
+</html>
