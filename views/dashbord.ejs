@@ -1,0 +1,27 @@
+<h1>Welcome, <%= user.username %>!</h1>
+<a href="/logout">Logout</a>
+
+<form action="/tasks" method="POST">
+  <input name="title" placeholder="Task title" required>
+  <input name="description" placeholder="Description">
+  <input type="date" name="deadline">
+  <select name="priority">
+    <option value="low">Low</option>
+    <option value="medium" selected>Medium</option>
+    <option value="high">High</option>
+  </select>
+  <button type="submit">Add Task</button>
+</form>
+
+<ul>
+  <% tasks.forEach(task => { %>
+    <li>
+      <strong><%= task.title %></strong> 
+      <span><%= task.completed ? '✅' : '' %></span>
+      <a href="/tasks/<%= task._id %>/edit">Edit</a>
+      <form action="/tasks/<%= task._id %>?_method=DELETE" method="POST" style="display:inline;">
+        <button type="submit">Delete</button>
+      </form>
+    </li>
+  <% }) %>
+</ul>
