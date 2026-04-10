@@ -29,3 +29,6 @@ cd task-manager-app
 npm install
 cp .env.example .env
 npm run dev
+
+## 🚀 Live Demo
+[https://task-manager-app-09d8.onrender.com](https://task-manager-app-09d8.onrender.com)
