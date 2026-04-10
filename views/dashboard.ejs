@@ -6,66 +6,55 @@
   <title>Task Manager</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    body { background-color: #f8fafc; }
     .task-card {
-      transition: all 0.2s;
+      transition: all 0.2s ease;
     }
     .task-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+    }
+    .completed {
+      text-decoration: line-through;
+      opacity: 0.7;
     }
   </style>
 </head>
-<body class="min-h-screen">
+<body class="bg-slate-50 min-h-screen">
   <div class="max-w-4xl mx-auto p-6">
-    
+
     <!-- Header -->
-    <div class="bg-white rounded-2xl shadow-sm p-6 mb-8 flex justify-between items-center">
+    <div class="bg-white rounded-3xl shadow-sm p-8 mb-10 flex justify-between items-center">
       <div>
         <h1 class="text-3xl font-bold text-gray-800">Welcome back, <span class="text-blue-600"><%= user.username %></span>!</h1>
-        <p class="text-gray-500 mt-1">Here's what you need to do today</p>
+        <p class="text-gray-500 mt-2">Stay productive today</p>
       </div>
-      <a href="/logout" 
-         class="px-5 py-2 text-red-600 hover:bg-red-50 rounded-xl font-medium transition-colors">
+      <a href="/logout" class="px-6 py-3 text-red-600 hover:bg-red-50 rounded-2xl font-medium transition-colors">
         Logout
       </a>
     </div>
 
     <!-- Add New Task -->
-    <div class="bg-white rounded-2xl shadow-sm p-8 mb-10">
-      <h2 class="text-xl font-semibold text-gray-700 mb-6">Add New Task</h2>
-      
+    <div class="bg-white rounded-3xl shadow-sm p-8 mb-12">
+      <h2 class="text-2xl font-semibold text-gray-700 mb-6">Add New Task</h2>
       <form action="/tasks" method="POST" class="grid grid-cols-1 md:grid-cols-12 gap-4">
         <div class="md:col-span-5">
-          <input 
-            type="text" 
-            name="title" 
-            placeholder="What needs to be done?" 
-            required
-            class="w-full px-5 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-blue-500">
+          <input type="text" name="title" placeholder="What needs to be done?" required
+                 class="w-full px-5 py-4 border border-gray-300 rounded-2xl focus:outline-none focus:border-blue-500 text-lg">
         </div>
-        
         <div class="md:col-span-4">
-          <input 
-            type="text" 
-            name="description" 
-            placeholder="Description (optional)"
-            class="w-full px-5 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-blue-500">
+          <input type="text" name="description" placeholder="Description (optional)"
+                 class="w-full px-5 py-4 border border-gray-300 rounded-2xl focus:outline-none focus:border-blue-500">
         </div>
-
         <div class="md:col-span-2">
-          <select name="priority" 
-                  class="w-full px-5 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-blue-500">
+          <select name="priority" class="w-full px-5 py-4 border border-gray-300 rounded-2xl focus:outline-none focus:border-blue-500">
             <option value="low">Low</option>
             <option value="medium" selected>Medium</option>
             <option value="high">High</option>
           </select>
         </div>
-
         <div class="md:col-span-1">
-          <button 
-            type="submit"
-            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-xl transition-colors">
+          <button type="submit" 
+                  class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 rounded-2xl transition-colors">
             Add
           </button>
         </div>
@@ -73,34 +62,46 @@
     </div>
 
     <!-- My Tasks -->
-    <div class="bg-white rounded-2xl shadow-sm p-8">
-      <h2 class="text-xl font-semibold text-gray-700 mb-6">My Tasks</h2>
+    <div class="bg-white rounded-3xl shadow-sm p-8">
+      <h2 class="text-2xl font-semibold text-gray-700 mb-6">My Tasks</h2>
 
       <% if (tasks && tasks.length > 0) { %>
         <div class="space-y-4">
           <% tasks.forEach(task => { %>
-            <div class="task-card bg-white border border-gray-200 rounded-2xl p-6 flex justify-between items-center">
-              <div class="flex-1">
-                <div class="flex items-center gap-3">
-                  <span class="font-medium text-lg <%= task.priority === 'high' ? 'text-red-600' : task.priority === 'medium' ? 'text-amber-600' : 'text-emerald-600' %>">
-                    <%= task.title %>
-                  </span>
-                </div>
+            <div class="task-card bg-white border <%= task.completed ? 'border-gray-200' : 'border-gray-300' %> rounded-2xl p-6 flex items-center gap-4">
+              
+              <!-- Checkbox -->
+              <form action="/tasks/<%= task._id %>/toggle" method="POST" class="flex-shrink-0">
+                <button type="submit" class="focus:outline-none">
+                  <div class="w-7 h-7 rounded-full border-2 <%= task.completed ? 'bg-green-500 border-green-500' : 'border-gray-400' %> flex items-center justify-center">
+                    <% if (task.completed) { %>
+                      <span class="text-white text-xl leading-none">✓</span>
+                    <% } %>
+                  </div>
+                </button>
+              </form>
+
+              <!-- Task Content -->
+              <div class="flex-1 min-w-0">
+                <p class="text-lg font-medium <%= task.completed ? 'completed text-gray-500' : 'text-gray-800' %>">
+                  <%= task.title %>
+                </p>
                 <% if (task.description) { %>
-                  <p class="text-gray-600 mt-1"><%= task.description %></p>
+                  <p class="text-gray-600 mt-1 <%= task.completed ? 'line-through' : '' %>"><%= task.description %></p>
                 <% } %>
-                <div class="text-sm text-gray-500 mt-2">
-                  Priority: 
-                  <span class="font-medium <%= task.priority === 'high' ? 'text-red-600' : task.priority === 'medium' ? 'text-amber-600' : 'text-emerald-600' %>">
-                    <%= task.priority.charAt(0).toUpperCase() + task.priority.slice(1) %>
+                <div class="flex items-center gap-3 mt-2 text-sm">
+                  <span class="px-3 py-1 rounded-full text-xs font-medium
+                    <%= task.priority === 'high' ? 'bg-red-100 text-red-700' : 
+                       task.priority === 'medium' ? 'bg-amber-100 text-amber-700' : 'bg-emerald-100 text-emerald-700' %>">
+                    <%= task.priority.toUpperCase() %>
                   </span>
                 </div>
               </div>
 
-              <form action="/tasks/<%= task._id %>?_method=DELETE" method="POST">
-                <button 
-                  type="submit"
-                  class="px-6 py-2 text-red-600 hover:bg-red-50 rounded-xl font-medium transition-colors">
+              <!-- Delete Button -->
+              <form action="/tasks/<%= task._id %>/delete" method="POST">
+                <button type="submit" 
+                        class="px-5 py-2 text-red-600 hover:bg-red-50 rounded-xl font-medium transition-colors">
                   Delete
                 </button>
               </form>
@@ -108,10 +109,10 @@
           <% }) %>
         </div>
       <% } else { %>
-        <div class="text-center py-16 text-gray-400">
-          <p class="text-2xl mb-2">📭</p>
-          <p class="text-lg">No tasks yet</p>
-          <p class="text-sm">Add your first task above</p>
+        <div class="text-center py-20 text-gray-400">
+          <p class="text-5xl mb-4">📭</p>
+          <p class="text-xl">No tasks yet</p>
+          <p class="mt-2">Add your first task above to get started</p>
         </div>
       <% } %>
     </div>

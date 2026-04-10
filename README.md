@@ -1,30 +1,25 @@
 # Personal Task Manager
 
-A full-stack task management web application with user authentication and CRUD operations.
+A clean and modern full-stack task management web application with user authentication.
 
 ![Dashboard](screenshots/dashboard.png)
 
 ## ✨ Features
-- User registration and login with session management
-- Create, view, and delete tasks
-- Set task priority (Low / Medium / High) and deadline
-- Clean and responsive user interface
+- User registration and login
+- Create, view and delete tasks
+- Priority levels (Low / Medium / High)
+- Modern responsive UI built with Tailwind CSS
 - MongoDB Atlas cloud database
 
 ## 🛠 Tech Stack
-- **Backend**: Node.js, Express.js
+- **Backend**: Node.js + Express.js
+- **Frontend**: EJS + Tailwind CSS
 - **Database**: MongoDB (MongoDB Atlas)
-- **Frontend**: EJS, CSS
 - **Authentication**: Express Session
-- **Others**: bcryptjs, dotenv, method-override
-
-## 🚀 Live Demo
-（如果你之後部署到 Render 再補上連結）
 
 ## 📸 Screenshots
 
 ![Dashboard](screenshots/dashboard.png)
-![Add New Task](screenshots/add-task.png)
 
 ## How to Run Locally
 
